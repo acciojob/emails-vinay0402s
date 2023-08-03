@@ -18,6 +18,11 @@ public class Gmail extends Email {
         trash = new ArrayList<Mail>();
     }
 
+    public Gmail(String emailId){
+        super(emailId);
+        this.inboxCapacity=Integer.MAX_VALUE;
+    }
+
     private static class Mail{
         private Date date;
         private String sender;
