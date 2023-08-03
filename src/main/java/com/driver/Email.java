@@ -20,9 +20,9 @@ public class Email {
 
     public void changePassword(String oldPassword, String newPassword){
         //Change password only if the oldPassword is equal to current password and the new password meets all of the following:
-        String currPass = getPassword();
+
         //step 1= Check if the oldPassword matches the current password
-        if(!currPass.equals(oldPassword)){
+        if(!this.password.equals(oldPassword)){
             System.out.println("The old password is incorrect");
             return;
         }
@@ -33,7 +33,7 @@ public class Email {
             return;
         }
 
-        currPass=newPassword;
+        this.password=newPassword;
         System.out.println("Password changed Successfully");
     }
     public boolean valid(String new_password){
@@ -43,23 +43,23 @@ public class Email {
         }
 
         // 2. It contains at least one uppercase letter
-        if(!new_password.matches(".*[A-Z]*.")) {
+        if(!new_password.matches(".*[A-Z]+.*")) {
             return false; //
         }
 
         // 3. It contains at least one lowercase letter
-        if(!new_password.matches(".*[a-z]*.")) {
+        if(!new_password.matches(".*[a-z]+.*")) {
             return false; //
         }
 
         // 4. It contains at least one digit
-        if(!new_password.matches(".*\\d*.")) {
+        if(!new_password.matches(".*\\d+.")) {
             return false; //
         }
 
         // 5. It contains at least one special character. Any character apart from alphabets and digits is a special character
         //[^A-Za-z0-9]
-        if(!new_password.matches(".*[^A-Za-z0-9]*.")) {
+        if(!new_password.matches(".*[^A-Za-z0-9]+.")) {
             return false; //
         }
 
