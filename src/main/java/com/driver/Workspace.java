@@ -5,10 +5,19 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class Workspace extends Gmail{
 
     private ArrayList<Meeting> calendar; // Stores all the meetings
+
+    public ArrayList<Meeting> getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(ArrayList<Meeting> calendar) {
+        this.calendar = calendar;
+    }
 
     public Workspace(String emailId) {
         super(emailId,Integer.MAX_VALUE);
@@ -26,24 +35,28 @@ public class Workspace extends Gmail{
         // 1. At a particular time, you can be present in at most one meeting
         // 2. If you want to attend a meeting, you must join it at its start time and leave at end time.
         // Example: If a meeting ends at 10:00 am, you cannot attend another meeting starting at 10:00 am
-        int maxMeeting=0;
-        int currMeeting=0;
 
-        LocalTime currtime = LocalTime.of(0,0);
-        // Sort the calendar by the end times of the meetings
-        calendar.sort((m1, m2) -> m1.getEndTime().compareTo(m2.getEndTime()));//lambda funct
+        if(calendar.size()==0) return 0;
 
-        for(Meeting meeting : calendar){
-            // Check if the meeting starts after the current time, then attend the meeting
-            if(meeting.getStartTime().isAfter(currtime)){
-                // Update the current time after attending meeting
-                currtime=meeting.getEndTime();
-                // Increment the currmeetings
-                currMeeting++;
+        Comparator<LocalTime> timeComparator = new Comparator<LocalTime>() {
+            @Override
+            public int compare(LocalTime o1, LocalTime o2) {
+                return o1.compareTo(o2);
+            }
+        };
+
+        Collections.sort(calendar, (a,b)->a.getEndTime().compareTo(b.getEndTime()));
+
+        LocalTime endTime = calendar.get(0).getEndTime();
+        int cnt=1;
+
+        for(int i=1;i<calendar.size();i++){
+            LocalTime currStarttime = calendar.get(i).getStartTime();
+            if(currStarttime.isAfter(endTime)){
+                cnt++;
+                endTime=calendar.get(i).getEndTime();
             }
         }
-
-        maxMeeting = Math.max(maxMeeting,currMeeting);
-        return maxMeeting;
+        return cnt;
     }
 }
